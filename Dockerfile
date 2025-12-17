@@ -12,7 +12,7 @@ COPY packages/server/package.json ./packages/server/
 COPY packages/web/package.json ./packages/web/
 
 # 安装依赖
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # 复制源代码
 COPY packages/server ./packages/server
@@ -35,7 +35,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/server/package.json ./packages/server/
 
 # 安装所有依赖（包括 tsx）
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # 复制后端源代码
 COPY packages/server ./packages/server
