@@ -44,7 +44,7 @@ export function convertToClash(nodes: ProxyNode[]): string {
       {
         name: '🚀 节点选择',
         type: 'select',
-        proxies: ['♻️ 自动选择', '☑️ 手动切换', '🎯 全球直连'],
+        proxies: ['♻️ 自动选择', '☑️ 手动切换', 'DIRECT'],
       },
       {
         name: '♻️ 自动选择',
@@ -70,19 +70,14 @@ export function convertToClash(nodes: ProxyNode[]): string {
         proxies: ['🚀 节点选择', '♻️ 自动选择', '☑️ 手动切换'],
       },
       {
-        name: '🎯 全球直连',
-        type: 'select',
-        proxies: ['DIRECT', '🚀 节点选择'],
-      },
-      {
         name: '🛑 广告拦截',
         type: 'select',
-        proxies: ['REJECT', 'DIRECT', '🚀 节点选择'],
+        proxies: ['REJECT', 'DIRECT'],
       },
       {
         name: '🐟 漏网之鱼',
         type: 'select',
-        proxies: ['🚀 节点选择', '♻️ 自动选择', '🎯 全球直连'],
+        proxies: ['🚀 节点选择', '♻️ 自动选择', 'DIRECT'],
       },
     ],
     rules: [
@@ -136,16 +131,16 @@ export function convertToClash(nodes: ProxyNode[]): string {
       'DOMAIN-SUFFIX,googleadservices.com,🛑 广告拦截',
       'DOMAIN-SUFFIX,googlesyndication.com,🛑 广告拦截',
       // 局域网直连
-      'IP-CIDR,192.168.0.0/16,🎯 全球直连,no-resolve',
-      'IP-CIDR,10.0.0.0/8,🎯 全球直连,no-resolve',
-      'IP-CIDR,172.16.0.0/12,🎯 全球直连,no-resolve',
-      'IP-CIDR,127.0.0.0/8,🎯 全球直连,no-resolve',
-      'IP-CIDR,100.64.0.0/10,🎯 全球直连,no-resolve',
-      'IP-CIDR6,::1/128,🎯 全球直连,no-resolve',
-      'IP-CIDR6,fc00::/7,🎯 全球直连,no-resolve',
-      'IP-CIDR6,fe80::/10,🎯 全球直连,no-resolve',
+      'IP-CIDR,192.168.0.0/16,DIRECT,no-resolve',
+      'IP-CIDR,10.0.0.0/8,DIRECT,no-resolve',
+      'IP-CIDR,172.16.0.0/12,DIRECT,no-resolve',
+      'IP-CIDR,127.0.0.0/8,DIRECT,no-resolve',
+      'IP-CIDR,100.64.0.0/10,DIRECT,no-resolve',
+      'IP-CIDR6,::1/128,DIRECT,no-resolve',
+      'IP-CIDR6,fc00::/7,DIRECT,no-resolve',
+      'IP-CIDR6,fe80::/10,DIRECT,no-resolve',
       // 国内直连
-      'GEOIP,CN,🎯 全球直连',
+      'GEOIP,CN,DIRECT',
       // 兜底规则
       'MATCH,🐟 漏网之鱼',
     ],
