@@ -2,7 +2,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# 安装 pnpm
+# 安装 pnpm 和编译工具（better-sqlite3 需要）
+RUN apk add --no-cache python3 make g++
 RUN npm install -g pnpm
 
 # 复制所有配置文件
@@ -25,7 +26,8 @@ RUN pnpm --filter @qiankui-sub/web build
 FROM node:20-alpine
 WORKDIR /app
 
-# 安装 pnpm
+# 安装 pnpm 和编译工具（better-sqlite3 需要）
+RUN apk add --no-cache python3 make g++
 RUN npm install -g pnpm
 
 # 复制配置文件
