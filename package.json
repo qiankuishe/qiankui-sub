@@ -1,6 +1,6 @@
 {
   "name": "qiankui-sub",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "节点订阅转换聚合服务",
   "pnpm": {

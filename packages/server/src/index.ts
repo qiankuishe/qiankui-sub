@@ -4,7 +4,7 @@ import cookie from '@fastify/cookie';
 import fastifyStatic from '@fastify/static';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { config } from './config.js';
+import { config, initConfig } from './config.js';
 import { initDatabase } from './db/index.js';
 import { authRoutes } from './routes/auth.js';
 import { sourcesRoutes } from './routes/sources.js';
@@ -20,6 +20,10 @@ const fastify = Fastify({
 
 // 初始化数据库
 initDatabase();
+
+// 初始化配置（从数据库读取或生成）
+import { configDb, getOrCreateConfig } from './db/index.js';
+initConfig(configDb, getOrCreateConfig);
 
 // 注册插件
 await fastify.register(cors, {
@@ -61,15 +65,6 @@ const start = async () => {
   try {
     await fastify.listen({ port: config.port, host: '0.0.0.0' });
     console.log(`Server listening on port ${config.port}`);
-    
-    // 首次启动显示登录信息
-    if (!process.env.ADMIN_PASSWORD) {
-      console.log('========================================');
-      console.log('🔐 初始登录信息（仅显示一次）');
-      console.log(`   用户名: ${config.adminUsername}`);
-      console.log(`   密码: ${config.adminPassword}`);
-      console.log('========================================');
-    }
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

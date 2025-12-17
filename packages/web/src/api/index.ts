@@ -1,6 +1,6 @@
 const BASE_URL = '/api';
 
-async function request<T>(url: string, options?: RequestInit): Promise<T> {
+async function request<T>(url: string, options?: RequestInit & { skipAuthRedirect?: boolean }): Promise<T> {
   const headers: Record<string, string> = { ...((options?.headers as Record<string, string>) || {}) };
   // 只在有 body 时才设置 Content-Type
   if (options?.body) {
@@ -13,12 +13,16 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
     headers,
   });
 
+  const data = await res.json();
+
+  // 401 处理：登录接口不跳转，其他接口跳转到登录页
   if (res.status === 401) {
-    window.location.href = '/login';
-    throw new Error('未登录');
+    if (!options?.skipAuthRedirect) {
+      window.location.href = '/login';
+    }
+    throw new Error(data.error || '未登录');
   }
 
-  const data = await res.json();
   if (!res.ok) {
     throw new Error(data.error || '请求失败');
   }
@@ -31,11 +35,12 @@ export const authApi = {
     request<{ success: boolean }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
+      skipAuthRedirect: true, // 登录接口 401 不跳转
     }),
 
   logout: () => request<{ success: boolean }>('/auth/logout', { method: 'POST', body: JSON.stringify({}) }),
 
-  check: () => request<{ authenticated: boolean }>('/auth/check'),
+  check: () => request<{ authenticated: boolean }>('/auth/check', { skipAuthRedirect: true }),
 };
 
 // 订阅源类型
