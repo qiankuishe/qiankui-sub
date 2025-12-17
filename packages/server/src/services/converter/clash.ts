@@ -161,10 +161,15 @@ function convertNode(node: ProxyNode): Record<string, unknown> | null {
         alterId: node.alterId,
         cipher: node.cipher,
         tls: node.tls,
-        ...(node.sni && { sni: node.sni }),
-        ...(node.skipCertVerify && { 'skip-cert-verify': node.skipCertVerify }),
+        ...(node.sni && { servername: node.sni }),
+        'skip-cert-verify': true,
         ...(node.network && { network: node.network }),
-        ...(node.wsPath && { 'ws-opts': { path: node.wsPath, headers: node.wsHeaders } }),
+        ...(node.wsPath && {
+          'ws-opts': {
+            path: node.wsPath,
+            headers: { Host: node.sni || node.server },
+          },
+        }),
         ...(node.grpcServiceName && { 'grpc-opts': { 'grpc-service-name': node.grpcServiceName } }),
       };
 
@@ -177,10 +182,16 @@ function convertNode(node: ProxyNode): Record<string, unknown> | null {
         uuid: node.uuid,
         ...(node.flow && { flow: node.flow }),
         tls: node.tls,
-        ...(node.sni && { sni: node.sni }),
-        ...(node.skipCertVerify && { 'skip-cert-verify': node.skipCertVerify }),
+        ...(node.sni && { servername: node.sni }),
+        'skip-cert-verify': true,
+        'client-fingerprint': 'chrome',
         ...(node.network && { network: node.network }),
-        ...(node.wsPath && { 'ws-opts': { path: node.wsPath, headers: node.wsHeaders } }),
+        ...(node.wsPath && {
+          'ws-opts': {
+            path: node.wsPath,
+            headers: { Host: node.sni || node.server },
+          },
+        }),
         ...(node.grpcServiceName && { 'grpc-opts': { 'grpc-service-name': node.grpcServiceName } }),
         ...(node.realityOpts && { 'reality-opts': { 'public-key': node.realityOpts.publicKey, 'short-id': node.realityOpts.shortId } }),
       };
@@ -203,9 +214,14 @@ function convertNode(node: ProxyNode): Record<string, unknown> | null {
         port: node.port,
         password: node.password,
         ...(node.sni && { sni: node.sni }),
-        ...(node.skipCertVerify && { 'skip-cert-verify': node.skipCertVerify }),
+        'skip-cert-verify': true,
         ...(node.network && { network: node.network }),
-        ...(node.wsPath && { 'ws-opts': { path: node.wsPath } }),
+        ...(node.wsPath && {
+          'ws-opts': {
+            path: node.wsPath,
+            headers: { Host: node.sni || node.server },
+          },
+        }),
         ...(node.grpcServiceName && { 'grpc-opts': { 'grpc-service-name': node.grpcServiceName } }),
       };
 
@@ -219,7 +235,8 @@ function convertNode(node: ProxyNode): Record<string, unknown> | null {
         ...(node.obfs && { obfs: node.obfs }),
         ...(node.obfsPassword && { 'obfs-password': node.obfsPassword }),
         ...(node.sni && { sni: node.sni }),
-        ...(node.skipCertVerify && { 'skip-cert-verify': node.skipCertVerify }),
+        'skip-cert-verify': true,
+        alpn: ['h3'],
       };
 
     case 'tuic':
@@ -230,11 +247,11 @@ function convertNode(node: ProxyNode): Record<string, unknown> | null {
         port: node.port,
         uuid: node.uuid,
         password: node.password,
-        ...(node.congestionControl && { 'congestion-control': node.congestionControl }),
-        ...(node.alpn && { alpn: node.alpn }),
+        'congestion-controller': node.congestionControl || 'bbr',
+        alpn: node.alpn || ['h3'],
         ...(node.sni && { sni: node.sni }),
-        ...(node.skipCertVerify && { 'skip-cert-verify': node.skipCertVerify }),
-        ...(node.udpRelayMode && { 'udp-relay-mode': node.udpRelayMode }),
+        'skip-cert-verify': true,
+        'udp-relay-mode': node.udpRelayMode || 'native',
       };
 
     default:

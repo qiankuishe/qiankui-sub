@@ -1,5 +1,14 @@
 # 更新日志
 
+## v1.0.1 (2025-12-17)
+
+### 修复
+- 修复 Clash/Mihomo 节点无法连接的问题
+- vless/vmess 节点添加 `servername`、`skip-cert-verify`、`client-fingerprint` 字段
+- ws-opts 添加 `headers.Host` 字段
+- hysteria2 节点添加 `alpn` 字段
+- tuic 节点添加 `congestion-controller`、`udp-relay-mode` 默认值
+
 ## v1.0.0 (2025-12-17)
 
 ### 新功能
