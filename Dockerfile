@@ -44,8 +44,14 @@ COPY tsconfig.base.json ./
 # 复制前端构建产物
 COPY --from=builder /app/packages/web/dist ./packages/web/dist
 
-# 创建数据目录
-RUN mkdir -p /app/data
+# 创建非 root 用户
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+
+# 创建数据目录并设置权限
+RUN mkdir -p /app/data && chown -R nodejs:nodejs /app
+
+# 切换到非 root 用户
+USER nodejs
 
 ENV NODE_ENV=production
 ENV PORT=3000

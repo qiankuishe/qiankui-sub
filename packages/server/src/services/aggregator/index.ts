@@ -147,10 +147,18 @@ function isUrlSafe(urlString: string): { safe: boolean; reason?: string } {
   return { safe: true };
 }
 
+// 最大重定向次数
+const MAX_REDIRECTS = 3;
+
 /**
  * 获取远程订阅内容
  */
-export async function fetchSubscription(url: string, timeout = 10000): Promise<string> {
+export async function fetchSubscription(url: string, timeout = 10000, redirectCount = 0): Promise<string> {
+  // 重定向深度限制
+  if (redirectCount > MAX_REDIRECTS) {
+    throw new Error(`Too many redirects (max ${MAX_REDIRECTS})`);
+  }
+
   // SSRF 防护检查
   const safeCheck = isUrlSafe(url);
   if (!safeCheck.safe) {
@@ -177,8 +185,8 @@ export async function fetchSubscription(url: string, timeout = 10000): Promise<s
         if (!redirectCheck.safe) {
           throw new Error(`Redirect blocked: ${redirectCheck.reason}`);
         }
-        // 递归获取重定向目标（限制一次重定向）
-        return fetchSubscription(location, timeout);
+        // 递归获取重定向目标
+        return fetchSubscription(location, timeout, redirectCount + 1);
       }
     }
 
