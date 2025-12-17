@@ -1,0 +1,34 @@
+{
+  "name": "qiankui-sub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "节点订阅转换聚合服务",
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3", "esbuild", "vue-demi"]
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "dev:server": "pnpm --filter @qiankui-sub/server run dev",
+    "dev:web": "pnpm --filter @qiankui-sub/web run dev",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint"
+  },
+  "keywords": [
+    "subscription",
+    "proxy",
+    "converter",
+    "clash",
+    "surge",
+    "singbox"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qiankuishe/qiankui-sub.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

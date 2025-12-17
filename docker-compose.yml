@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  qiankui-sub:
+    image: ghcr.io/qiankuishe/qiankui-sub:latest
+    # 或者本地构建: build: .
+    container_name: qiankui-sub
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - ADMIN_USERNAME=admin
+      # 不设置 ADMIN_PASSWORD 则自动生成，首次启动查看日志获取
+      # - ADMIN_PASSWORD=your-password
+      # 不设置 SUB_TOKEN 则自动生成
+      # - SUB_TOKEN=your-sub-token
+    volumes:
+      - ./data:/app/data
